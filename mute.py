@@ -203,9 +203,11 @@ async def _(event):
     if (60 <= period < 3600):
         time = str(period//60) + " " + "minutes"
       # nit = "minutes"
-    elif period >= 3600:
+    elif (3600 <= period < 86400)
         time = str(period//3600) + " " + "hours"
       # unit = "hours"
+    elif period >=86400):
+        time = str(period//86400) + " " + "days"
     else:
         time = str(period) + " " + "seconds"
        #unit = "seconds"
@@ -241,12 +243,14 @@ async def _(event):
     	await event.edit("``Specify the time by using time=<n>`")
         
     period = await string_to_secs(period)
-    if period >= 60 & period < 3600:
-    	time = str(period//60) + " " + "minutes"
+    if (60 <= period < 3600):
+        time = str(period//60) + " " + "minutes"
       # nit = "minutes"
-    elif period >= 3600:
-        time = str(period//3600 ) + " " + "hours"
+    elif (3600 <= period < 86400)
+        time = str(period//3600) + " " + "hours"
       # unit = "hours"
+    elif period >=86400):
+        time = str(period//86400) + " " + "days"
     else:
         time = str(period) + " " + "seconds"
        #unit = "seconds"
