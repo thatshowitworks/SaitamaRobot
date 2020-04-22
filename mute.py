@@ -200,10 +200,11 @@ async def _(event):
     	await event.edit("``Specify the time by using time=<n>`")
         
     period = await string_to_secs(period)
-    if period >= 60 & period < 3600:
-    	time = str(period//60) + " " + "minutes"
+    if period >= 60:
+        z = str(period//60) + " " + "minutes"
+    	time = z
       # nit = "minutes"
-    elif period >= 3600:
+    if z >= 3600:
         time = str(period//3600 ) + " " + "hours"
       # unit = "hours"
     else:
