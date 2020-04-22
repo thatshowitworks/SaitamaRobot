@@ -202,7 +202,7 @@ async def _(event):
     period = await string_to_secs(period)
     if period >= 60:
         z = str(period//60) + " " + "minutes"
-    	time = z
+    time = z
       # nit = "minutes"
     if z >= 3600:
         time = str(period//3600 ) + " " + "hours"
@@ -259,5 +259,3 @@ async def _(event):
     to_ban_id = r_mesg.from_id
     await borg(EditBannedRequest(event.chat_id, to_ban_id, ChatBannedRights(until_date=timedelta(seconds=period), view_messages=True, send_messages=True, send_media=True, send_stickers=True, send_gifs=True, send_games=True, send_inline=True, embed_links=True)))
     await event.edit(f"**Banned for {time}**")
-   
-   
