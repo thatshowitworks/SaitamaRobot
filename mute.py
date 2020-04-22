@@ -206,7 +206,7 @@ async def _(event):
     elif (3600 <= period < 86400):
         time = str(period//3600) + " " + "hours"
       # unit = "hours"
-    elif period >=86400):
+    elif period >=86400:
         time = str(period//86400) + " " + "days"
     else:
         time = str(period) + " " + "seconds"
@@ -249,7 +249,7 @@ async def _(event):
     elif (3600 <= period < 86400):
         time = str(period//3600) + " " + "hours"
       # unit = "hours"
-    elif period >=86400):
+    elif period >=86400:
         time = str(period//86400) + " " + "days"
     else:
         time = str(period) + " " + "seconds"
