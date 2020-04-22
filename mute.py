@@ -188,24 +188,23 @@ async def _(event):
     start = datetime.now()
     to_ban_id = None
     rights = None
-    input_cmd = "tban"
+    input_cmd = "tmute"
     if input_cmd == "ban":
         rights = 1
     elif input_cmd == "unban":
         rights = 2
-    elif input_cmd == "tban":
+    elif input_cmd == "tmute":
         rights = 2
     period = "time=" + event.pattern_match.group(1)
     if not period:
     	await event.edit("``Specify the time by using time=<n>`")
         
     period = await string_to_secs(period)
-    if period >= 60:
-        z = str(period//60) + " " + "minutes"
-    time = z
+    if (60 <= period < 3600):
+        time = str(period//60) + " " + "minutes"
       # nit = "minutes"
-    if z >= 3600:
-        time = str(period//3600 ) + " " + "hours"
+    elif period >= 3600:
+        time = str(period//3600) + " " + "hours"
       # unit = "hours"
     else:
         time = str(period) + " " + "seconds"
