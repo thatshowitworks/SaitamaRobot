@@ -14,21 +14,7 @@ adminregexp = re.compile(r"\d+(?:w|d|h|m|s)?")
 
 
 async def amount_to_secs(amount: tuple) -> int:
-    """Resolves one unit to total seconds.
 
-    Args:
-        amount (``int``, ``str``):
-            Tuple where str is the unit.
-
-    Returns:
-        ``int``:
-            Total seconds of the unit on success.
-
-    Example:
-        >>> await amount_to_secs(("1", "m"))
-        60
-
-    """
     num, unit = amount
 
     num = int(num)
@@ -50,21 +36,7 @@ async def amount_to_secs(amount: tuple) -> int:
 
 
 async def string_to_secs(string: str) -> int:
-    """Converts a time string to total seconds.
-
-    Args:
-        string (``str``):
-            String conatining the time.
-
-    Returns:
-        ``int``:
-            Total seconds of all the units.
-
-    Example:
-        >>> await string_to_sec("6h20m")
-        22800
-
-    """
+   
     values = regexp.findall(string)
 
     totalValues = len(values)
@@ -123,7 +95,7 @@ async def _(event):
     rights = None
     input_cmd = "mute"
     if input_cmd == "ban":
-    	rights = 1
+        rights = 1
     elif input_cmd == "unban":
         rights = 2
     elif input_cmd == "mute":
@@ -143,8 +115,8 @@ async def _(event):
         await event.edit(str(exc))
     else:
         await event.edit(f"**Muted**")
-    
-        
+
+
 @borg.on(admin_cmd(pattern="unmute ?(.*)"))
 async def _(event):
     # Space weirdness in regex required because argument is optional and other
@@ -176,16 +148,17 @@ async def _(event):
         await event.edit(str(exc))
     else:
         await event.edit(f"**Unmuted**")
-  
+
+
 @borg.on(admin_cmd(pattern="tmute ?(.*)"))
 async def _(event):
     # Space weirdness in regex required because argument is optional and other
     # commands start with ".unban"
     if event.fwd_from:
         return
-    
-    
+
     start = datetime.now()
+    x = 1
     to_ban_id = None
     rights = None
     input_cmd = "tmute"
@@ -196,39 +169,40 @@ async def _(event):
     elif input_cmd == "tmute":
         rights = 2
     period = "time=" + event.pattern_match.group(1)
-    if not period:
-    	await event.edit("``Specify the time by using time=<n>`")
-        
-    period = await string_to_secs(period)
-    if (60 <= period < 3600):
-        time = str(period//60) + " " + "minutes"
-      # nit = "minutes"
-    elif (3600 <= period < 86400):
-        time = str(period//3600) + " " + "hours"
-      # unit = "hours"
-    elif period >=86400:
-        time = str(period//86400) + " " + "days"
+    if period == "time=":
+        await event.edit("`Specify the time`")
     else:
-        time = str(period) + " " + "seconds"
-       #unit = "seconds"
-    reply_msg_id = event.reply_to_msg_id
-    if not reply_msg_id:
-    	await event.edit("`Reply to a user message`")
-        
-    r_mesg = await event.get_reply_message()
-    to_ban_id = r_mesg.from_id
-    await borg(EditBannedRequest(event.chat_id, to_ban_id, ChatBannedRights(until_date=timedelta(seconds=period), view_messages=None, send_messages=True, send_media=True, send_stickers=True, send_gifs=True, send_games=True, send_inline=True, embed_links=True)))
-    await event.edit(f"**Muted for {time}**")
-    
+        period = await string_to_secs(period)
+        if (60 <= period < 3600):
+            time = str(period//60) + " " + "minutes"
+       # nit = "minutes"
+        elif (3600 <= period < 86400):
+            time = str(period//3600) + " " + "hours"
+       # unit = "hours"
+        elif period >= 86400:
+            time = str(period//86400) + " " + "days"
+        else:
+            time = str(period) + " " + "seconds"
+        if x == 1:
+            reply_msg_id = event.reply_to_msg_id
+            r_mesg = await event.get_reply_message()
+            if not r_mesg:
+                await event.edit("`Reply to a user message`")
+            else:
+                to_ban_id = r_mesg.from_id
+                await borg(EditBannedRequest(event.chat_id, to_ban_id, ChatBannedRights(until_date=timedelta(seconds=period), view_messages=None, send_messages=True, send_media=True, send_stickers=True, send_gifs=True, send_games=True, send_inline=True, embed_links=True)))
+                await event.edit(f"**Muted for {time}**")
+
+
 @borg.on(admin_cmd(pattern="tban ?(.*)"))
 async def _(event):
     # Space weirdness in regex required because argument is optional and other
     # commands start with ".unban"
     if event.fwd_from:
         return
-    
-    
+
     start = datetime.now()
+    x = 1
     to_ban_id = None
     rights = None
     input_cmd = "tban"
@@ -239,26 +213,26 @@ async def _(event):
     elif input_cmd == "tban":
         rights = 2
     period = "time=" + event.pattern_match.group(1)
-    if not period:
-    	await event.edit("``Specify the time by using time=<n>`")
-        
-    period = await string_to_secs(period)
-    if (60 <= period < 3600):
-        time = str(period//60) + " " + "minutes"
-      # nit = "minutes"
-    elif (3600 <= period < 86400):
-        time = str(period//3600) + " " + "hours"
-      # unit = "hours"
-    elif period >=86400:
-        time = str(period//86400) + " " + "days"
+    if period == "time=":
+        await event.edit("`Specify the time`")
     else:
-        time = str(period) + " " + "seconds"
-       #unit = "seconds"
-    reply_msg_id = event.reply_to_msg_id
-    if not reply_msg_id:
-    	await event.edit("`Reply to a user message`")
-        
-    r_mesg = await event.get_reply_message()
-    to_ban_id = r_mesg.from_id
-    await borg(EditBannedRequest(event.chat_id, to_ban_id, ChatBannedRights(until_date=timedelta(seconds=period), view_messages=True, send_messages=True, send_media=True, send_stickers=True, send_gifs=True, send_games=True, send_inline=True, embed_links=True)))
-    await event.edit(f"**Banned for {time}**")
+        period = await string_to_secs(period)
+        if (60 <= period < 3600):
+            time = str(period//60) + " " + "minutes"
+       # nit = "minutes"
+        elif (3600 <= period < 86400):
+            time = str(period//3600) + " " + "hours"
+       # unit = "hours"
+        elif period >= 86400:
+            time = str(period//86400) + " " + "days"
+        else:
+            time = str(period) + " " + "seconds"
+        if x == 1:
+            reply_msg_id = event.reply_to_msg_id
+            r_mesg = await event.get_reply_message()
+            if not r_mesg:
+                await event.edit("`Reply to a user message`")
+            else:
+                to_ban_id = r_mesg.from_id
+                await borg(EditBannedRequest(event.chat_id, to_ban_id, ChatBannedRights(until_date=timedelta(seconds=period), view_messages=None, send_messages=True, send_media=True, send_stickers=True, send_gifs=True, send_games=True, send_inline=True, embed_links=True)))
+                await event.edit(f"**Banned for {time}**")
